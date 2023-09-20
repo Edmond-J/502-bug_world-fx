@@ -21,6 +21,5 @@
       <Button layoutX="282.0" layoutY="599.0" mnemonicParsing="false" prefWidth="55.0" text="OK" />
       <Button layoutX="360.0" layoutY="599.0" mnemonicParsing="false" prefWidth="55.0" text="Cancel" />
       <Label fx:id="speedLabel" layoutX="320.0" layoutY="170.0" text="Label" />
-      <Label layoutX="320.0" layoutY="120.0" text="Label" />
    </children>
 </Pane>

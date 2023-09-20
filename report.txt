@@ -1,0 +1,22 @@
+
+-Overcome issues:
+1.The biggest issue is to add another setting pane over the game pane when the game is paused, and return the value from the control component to the program after make the setting. I overcome this issue by keep trying different way and test the result. I got the knowledge from the javafx document, and YouTube online course. At the begining I tried to use an alart dialog window, but that doesn't look nice. I spent a lot of time to learn the theroy and finally figured out the concept and the relationship between Imageview, Scene, Pane, Group, Stage, Parent.
+
+
+-Know issues:
+1.Sometimes when a bug moves along the edge, it will get stuck, keep shaking, and can not bounce back.
+
+<Report of the Bug World FX>
+
+-Most proud Features:
+1.Bugs move naturally.
+Bugs are neighter just moving in a straight, nor completely randomly. Instead, they move in a smooth arc, and with a small chance thay change direction slightly, which reflects the laws of kinematics. To achieve this, I used the direction angle and speed to caculate the next position a bug will appear. To let the bug move smoothly, I used a valuable to record the angle offset in last turn. There's 85% chance that bugs move with a same angle offset with last turn.
+
+2.Bugs always face the direction they are moving.
+By using the solution of direction angle, which is designed for the feature 1, it's very easy to let the bug image rotate with the right angle.
+
+3.The tank can fire to the bugs, and the bugs will also attack the tank.
+The missile from the tank's gun, and flys to the direction the tank is facing. When it hit the bug, it stops and dispears, and the bug lose HP. When the bug touches the tank, tank will also lose hp. After the tank's HP drops below 0, the game is over, and the program stops.
+
+-Design change in the later version:
+This is literally a brand new project which has very little relation with the former Bug  World. So a lot of function is still pending. In this version, different kinds of bug has different value of speed, HP, damage, but they are in the same class. In the later version they will have separate classes to write different methods. 

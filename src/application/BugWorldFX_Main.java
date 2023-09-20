@@ -14,11 +14,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 public class BugWorldFX_Main extends Application {
 	static double width = 1920;
@@ -76,10 +78,17 @@ public class BugWorldFX_Main extends Application {
 //		settingGroup.getChildren().add(settingButton);
 		Pane container = new Pane();
 		Pane game = new Pane(gameGroup);
-		Pane setting = FXMLLoader.load(getClass().getResource("setting.fxml"));// new Pane(settingGroup); 
-//		setting.setVisible(false);
+//		Label gameOverLabel=new Label();
+//		Font gameOverFont=new Font(30);
+//		gameOverLabel.setText("Game Over");
+//		
+//		gameOverLabel.setFont(gameOverFont);
+		Pane gameOver = FXMLLoader.load(getClass().getResource("gameOver.fxml"));
+		gameOver.setVisible(false);
+		Pane setting = FXMLLoader.load(getClass().getResource("setting.fxml"));// new Pane(settingGroup);
+		setting.setVisible(false);
 		setting.setStyle("-fx-background-color: lightgray;");
-		container.getChildren().addAll(game, setting);
+		container.getChildren().addAll(game, setting, gameOver);
 		KeyFrame frame = new KeyFrame(Duration.millis(25), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -113,6 +122,7 @@ public class BugWorldFX_Main extends Application {
 //						currentHP.setFill(Color.GREEN);
 						if (Tank.armor <= 0) {
 							timeline.stop();
+							gameOver.setVisible(true);
 							System.out.println("game over");
 						}
 					}
