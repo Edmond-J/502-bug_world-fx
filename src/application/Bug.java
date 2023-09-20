@@ -2,15 +2,17 @@ package application;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class Bug extends ImageView {
 	double speed;
 	double width;
 	double height;
-	double dx, dy;
 	double direction;
 	double offset;
 	boolean pose;
+	double HP;
 
 	public Bug() {
 		// TODO Auto-generated constructor stub
@@ -44,11 +46,16 @@ public class Bug extends ImageView {
 //		else if (Math.random() > 0.5)
 //			direction += offset*0.2;
 		setRotate(direction/Math.PI*180+90);
-		dx = Math.cos(direction)*speed*gameSpeed;// (speed*(0.5+Math.random()*0.5))
-		dy = Math.sin(direction)*speed*gameSpeed;
+		double dx = Math.cos(direction)*speed*gameSpeed;// (speed*(0.5+Math.random()*0.5))
+		double dy = Math.sin(direction)*speed*gameSpeed;
 		setTranslateX(getTranslateX()+dx);
 		setTranslateY(getTranslateY()+dy);
-//		setCenterX(getCenterX()+dx);
-//		setCenterY(getCenterY()+dy);
+	}
+
+	public void showHP() {
+		Rectangle HPbox = new Rectangle(getLayoutX(), getLayoutY()+110, width, 16);
+		HPbox.setFill(Color.GREEN);
+		HPbox.setTranslateX(getTranslateX());
+		HPbox.setTranslateY(getTranslateY());
 	}
 }

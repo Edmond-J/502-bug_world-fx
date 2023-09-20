@@ -22,6 +22,7 @@ public class Tank extends ImageView {
 	public Tank(Image image) {
 		super(image);
 		speed = 8;
+		armor=100;
 		// TODO Auto-generated constructor stub
 	}
 }

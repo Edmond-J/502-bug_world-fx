@@ -22,6 +22,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class BugWorldFX_Main extends Application {
 //	@FXML
@@ -54,17 +56,19 @@ public class BugWorldFX_Main extends Application {
 		tank.setFitHeight(96);
 		tank.setX(width/2);
 		tank.setY(height/2);
-//		ProgressBar tankHP = new ProgressBar();
-//		tankHP.setPrefWidth(96);
-//		tankHP.setPrefHeight(16);
-//		tankHP.setLayoutX(tank.getX());
-//		tankHP.setLayoutY(tank.getY()+110);
+
+		Rectangle tankHP = new Rectangle(tank.getX(), tank.getY()+110, 96, 9);
+		tankHP.setFill(Color.LIGHTGRAY);
+		Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*tank.armor/100, 9);
+		currentHP.setFill(Color.GREEN);
+
 		ArrayList<Bug> bugList = generateBugs();
 		Simulate circle1 = new Simulate(200, 200, 20);
 		Group gameGroup = new Group();
 		gameGroup.getChildren().add(circle1);
 		gameGroup.getChildren().add(tank);
-//		gameGroup.getChildren().add(tankHP);
+		gameGroup.getChildren().add(tankHP);
+		gameGroup.getChildren().add(currentHP);
 		for (Bug b : bugList) {
 			gameGroup.getChildren().add(b);
 		}
@@ -96,6 +100,8 @@ public class BugWorldFX_Main extends Application {
 					b.changeDirection(gameSpeed);
 				}
 				circle1.changeDirection();
+//				HPbox.setTranslateX(tank.getTranslateX());
+//				HPbox.setTranslateY(tank.getTranslateY());
 			}
 		});
 		Timeline timeline = new Timeline();
@@ -104,6 +110,10 @@ public class BugWorldFX_Main extends Application {
 		timeline.pause();
 		Scene scene = new Scene(container, width, height);
 		scene.setOnKeyPressed(e -> {
+			tankHP.setLayoutX(tank.getLayoutX());
+			tankHP.setLayoutY(tank.getLayoutY());
+			currentHP.setLayoutX(tank.getLayoutX());
+			currentHP.setLayoutY(tank.getLayoutY());
 			if (e.getCode() == KeyCode.W) {
 				tank.setRotate(0);
 				tank.setLayoutY(tank.getLayoutY()-10);
@@ -128,6 +138,8 @@ public class BugWorldFX_Main extends Application {
 					setting.setVisible(true);
 				}
 			}
+			
+
 		});
 		Image icon = new Image("ladybug.png");
 		primaryStage.getIcons().add(icon);
