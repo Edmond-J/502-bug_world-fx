@@ -16,10 +16,10 @@ public class Simulate extends Circle {
 	}
 
 	public void changeDirection() {
-//		if (Math.random() > 0.95)
-//			direction += (Math.random()-0.5)*0.8;
-//		else if (Math.random() > 0.9)
-//			direction += (Math.random()-0.5)*0.4;
+		if (Math.random() > 0.95)
+			direction += (Math.random()-0.5)*0.8;
+		else if (Math.random() > 0.9)
+			direction += (Math.random()-0.5)*0.4;
 		dx=Math.cos(direction)*speed;//(speed*(0.5+Math.random()*0.5))
 		dy=Math.sin(direction)*speed;
 		setCenterX(getCenterX()+dx);

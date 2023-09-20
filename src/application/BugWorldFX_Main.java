@@ -53,12 +53,13 @@ public class BugWorldFX_Main extends Application {
 		tank.setFitHeight(96);
 		tank.setLayoutX(width/2);
 		tank.setLayoutY(height/2);
-
 		Rectangle tankHP = new Rectangle(tank.getX(), tank.getY()+110, 96, 9);
 		tankHP.setFill(Color.LIGHTGRAY);
 		Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*Tank.armor/100, 9);
 		currentHP.setFill(Color.GREEN);
 		ArrayList<Bug> bugList = generateBugs();
+		ArrayList<Missile> misList = new ArrayList<Missile> ();
+		
 		Simulate circle1 = new Simulate(200, 200, 20);
 		Group gameGroup = new Group();
 		gameGroup.getChildren().add(circle1);
@@ -87,7 +88,8 @@ public class BugWorldFX_Main extends Application {
 					circle1.direction = 2*Math.PI-circle1.direction;
 				}
 				if ((circle1.getCenterX()-tank.getLayoutX()-48)*(circle1.getCenterX()-tank.getLayoutX()-48)
-						+(circle1.getCenterY()-tank.getLayoutY()-48)*(circle1.getCenterY()-tank.getLayoutY()-48) <= 50*50) {
+						+(circle1.getCenterY()-tank.getLayoutY()-48)*(circle1.getCenterY()-tank.getLayoutY()-48) <= 50
+								*50) {
 					circle1.direction = Math.PI-circle1.direction;
 				}
 				for (Bug b : bugList) {
@@ -98,6 +100,9 @@ public class BugWorldFX_Main extends Application {
 						b.direction = 2*Math.PI-b.direction;
 					}
 					b.changeDirection(gameSpeed);
+				}
+				for(Missile m:misList){
+					m.flying();
 				}
 				circle1.changeDirection();
 //				HPbox.setTranslateX(tank.getTranslateX());
@@ -116,15 +121,19 @@ public class BugWorldFX_Main extends Application {
 			currentHP.setLayoutY(tank.getLayoutY());
 			if (e.getCode() == KeyCode.W) {
 				tank.setRotate(0);
+				Tank.rotate = 0;
 				tank.setLayoutY(tank.getLayoutY()-Tank.speed);
 			} else if (e.getCode() == KeyCode.A) {
 				tank.setRotate(270);
+				Tank.rotate = 270;
 				tank.setLayoutX(tank.getLayoutX()-Tank.speed);
 			} else if (e.getCode() == KeyCode.S) {
 				tank.setRotate(180);
+				Tank.rotate = 180;
 				tank.setLayoutY(tank.getLayoutY()+Tank.speed);
 			} else if (e.getCode() == KeyCode.D) {
 				tank.setRotate(90);
+				Tank.rotate = 90;
 				tank.setLayoutX(tank.getLayoutX()+Tank.speed);
 //				tankHP.setTranslateX(tank.getX());
 //				tankHP.setTranslateY(tank.getY()+110);
@@ -137,6 +146,13 @@ public class BugWorldFX_Main extends Application {
 					timeline.pause();
 					setting.setVisible(true);
 				}
+			} else if (e.getCode() == KeyCode.SPACE&&System.currentTimeMillis()-Tank.lastFire>500) {
+				Missile missile = new Missile(new Image("missile.png"), tank.getLayoutX()+24, tank.getLayoutY(),
+						Tank.rotate);
+				Tank.lastFire=System.currentTimeMillis();
+				gameGroup.getChildren().add(missile);
+				misList.add(missile);
+				
 			}
 			System.out.println("lay:"+tank.getLayoutX());
 			System.out.println("x:"+tank.getX());
