@@ -26,12 +26,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class BugWorldFX_Main extends Application {
-//	@FXML
-//	Spinner quantitySpinner;
-//	Slider speedSlider;
 	static double width = 1920;
 	static double height = 1080;
-	static double gameSpeed=0.8;
+	static double gameSpeed = 1.0;
 	static boolean pause = false;
 	static int bugQuantity = 1;
 
@@ -54,14 +51,13 @@ public class BugWorldFX_Main extends Application {
 		Tank tank = new Tank(new Image("tank.png"));
 		tank.setFitWidth(96);
 		tank.setFitHeight(96);
-		tank.setX(width/2);
-		tank.setY(height/2);
+		tank.setLayoutX(width/2);
+		tank.setLayoutY(height/2);
 
 		Rectangle tankHP = new Rectangle(tank.getX(), tank.getY()+110, 96, 9);
 		tankHP.setFill(Color.LIGHTGRAY);
-		Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*tank.armor/100, 9);
+		Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*Tank.armor/100, 9);
 		currentHP.setFill(Color.GREEN);
-
 		ArrayList<Bug> bugList = generateBugs();
 		Simulate circle1 = new Simulate(200, 200, 20);
 		Group gameGroup = new Group();
@@ -90,11 +86,15 @@ public class BugWorldFX_Main extends Application {
 				if (circle1.getCenterY() < circle1.getRadius() || circle1.getCenterY()+circle1.getRadius() > height) {
 					circle1.direction = 2*Math.PI-circle1.direction;
 				}
+				if ((circle1.getCenterX()-tank.getLayoutX()-48)*(circle1.getCenterX()-tank.getLayoutX()-48)
+						+(circle1.getCenterY()-tank.getLayoutY()-48)*(circle1.getCenterY()-tank.getLayoutY()-48) <= 50*50) {
+					circle1.direction = Math.PI-circle1.direction;
+				}
 				for (Bug b : bugList) {
-					if (b.getTranslateX()-10 < 0 || b.getTranslateX()+b.width > width) {
+					if (b.getTranslateX() < 50 || b.getTranslateX()+50 > width) {
 						b.direction = Math.PI-b.direction;
 					}
-					if (b.getTranslateY()-10 < 0 || b.getTranslateY()+b.height > height) {
+					if (b.getTranslateY() < 50 || b.getTranslateY()+50 > height) {
 						b.direction = 2*Math.PI-b.direction;
 					}
 					b.changeDirection(gameSpeed);
@@ -116,16 +116,16 @@ public class BugWorldFX_Main extends Application {
 			currentHP.setLayoutY(tank.getLayoutY());
 			if (e.getCode() == KeyCode.W) {
 				tank.setRotate(0);
-				tank.setLayoutY(tank.getLayoutY()-10);
+				tank.setLayoutY(tank.getLayoutY()-Tank.speed);
 			} else if (e.getCode() == KeyCode.A) {
 				tank.setRotate(270);
-				tank.setLayoutX(tank.getLayoutX()-10);
+				tank.setLayoutX(tank.getLayoutX()-Tank.speed);
 			} else if (e.getCode() == KeyCode.S) {
 				tank.setRotate(180);
-				tank.setLayoutY(tank.getLayoutY()+10);
+				tank.setLayoutY(tank.getLayoutY()+Tank.speed);
 			} else if (e.getCode() == KeyCode.D) {
 				tank.setRotate(90);
-				tank.setLayoutX(tank.getLayoutX()+10);
+				tank.setLayoutX(tank.getLayoutX()+Tank.speed);
 //				tankHP.setTranslateX(tank.getX());
 //				tankHP.setTranslateY(tank.getY()+110);
 			} else if (e.getCode() == KeyCode.ESCAPE) {
@@ -138,8 +138,9 @@ public class BugWorldFX_Main extends Application {
 					setting.setVisible(true);
 				}
 			}
-			
-
+			System.out.println("lay:"+tank.getLayoutX());
+			System.out.println("x:"+tank.getX());
+			System.out.println("tran:"+tank.getTranslateX());
 		});
 		Image icon = new Image("ladybug.png");
 		primaryStage.getIcons().add(icon);
@@ -148,7 +149,6 @@ public class BugWorldFX_Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-
 //	public void setGameSpeed(ActionEvent e) {
 //		double speed=speedSlider.getValue();
 //		System.out.println(speed);

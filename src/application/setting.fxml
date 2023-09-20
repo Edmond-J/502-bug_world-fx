@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080" prefWidth="450" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SettingController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080" prefWidth="450" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SpeedController">
    <children>
       <Slider fx:id="speedSlider" blockIncrement="0.1" layoutX="140.0" layoutY="170.0" majorTickUnit="0.1" max="1.5" min="0.5" minorTickCount="0" prefHeight="14.0" prefWidth="160.0" showTickMarks="true" value="1.0" />
       <Spinner fx:id="quantity" editable="true" layoutX="140.0" layoutY="120.0" prefHeight="23.0" prefWidth="83.0" />

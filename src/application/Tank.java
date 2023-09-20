@@ -4,11 +4,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Tank extends ImageView {
-	int speed;
-	int cannon;
-	double speedUp;
-	double armor;
-	boolean shield;
+	static int speed;
+	static int cannon;
+	static double speedUp;
+	static double armor;
+	static boolean shield;
 
 	public Tank() {
 		// TODO Auto-generated constructor stub
