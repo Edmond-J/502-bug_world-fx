@@ -1,36 +1,47 @@
 package application;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 public class Bug extends ImageView {
-	double speed;
+	String name;
 	double width;
 	double height;
 	double direction;
 	double offset;
 	boolean pose;
-	double HP;
+	double speed;
+	int HP;
+	int damage;
+	double lastHit;
+	Label label;
 
 	public Bug() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Bug(String url) {
 		super(url);
-		// TODO Auto-generated constructor stub
 	}
 
-	public Bug(Image image, double s) {
+	public Bug(Image image, double s,int hp, int dam) {
 		super(image);
+		name=image.getUrl();
 		speed = s;
 		width = image.getWidth();
 		height = image.getHeight();
 		setTranslateX(Math.random()*0.8*1800);
 		setTranslateY(Math.random()*0.8*1200);
 		direction = Math.random()*2*Math.PI;
+		HP=hp;
+		damage=dam;
+		label=new Label(""+HP);
+		label.setTextFill(Color.DARKGRAY);
+		Font font=new Font("Microsoft YaHei Bold",15);
+		label.setFont(font);
 	}
 
 	public void changeDirection(double gameSpeed) {
@@ -50,12 +61,15 @@ public class Bug extends ImageView {
 		double dy = Math.sin(direction)*speed*gameSpeed;
 		setTranslateX(getTranslateX()+dx);
 		setTranslateY(getTranslateY()+dy);
+		label.setTranslateX(getTranslateX()+width/2);
+		label.setTranslateY(getTranslateY()-25);
+		label.setText(""+HP);
 	}
 
-	public void showHP() {
-		Rectangle HPbox = new Rectangle(getLayoutX(), getLayoutY()+110, width, 16);
-		HPbox.setFill(Color.GREEN);
-		HPbox.setTranslateX(getTranslateX());
-		HPbox.setTranslateY(getTranslateY());
-	}
+//	public void showHP() {
+//		Rectangle HPbox = new Rectangle(getLayoutX(), getLayoutY()+110, width, 16);
+//		HPbox.setFill(Color.GREEN);
+//		HPbox.setTranslateX(getTranslateX());
+//		HPbox.setTranslateY(getTranslateY());
+//	}
 }

@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 public class Missile extends ImageView {
 	double rotate;
 	double speed;
+	double damage=8;
 
 	public Missile() {
 		// TODO Auto-generated constructor stub
@@ -20,6 +21,7 @@ public class Missile extends ImageView {
 		super(image);
 		speed=25;
 		this.rotate=rotate;
+		
 		setLayoutX(x);
 		setLayoutY(y);
 	}
@@ -35,16 +37,16 @@ public class Missile extends ImageView {
 	
 	public void flying(){
 		if(rotate==0){
-			setRotate(0);
+//			setRotate(0);
 			setLayoutY(getLayoutY()-speed);
 		}else if(rotate==270){
-			setRotate(270);
+//			setRotate(270);
 			setLayoutX(getLayoutX()-speed);
 		}else if(rotate==180){
-			setRotate(180);
+//			setRotate(180);
 			setLayoutY(getLayoutY()+speed);
 		}else if((rotate==90)){
-			setRotate(90);
+//			setRotate(90);
 			setLayoutX(getLayoutX()+speed);
 		}
 	}

@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -35,13 +36,13 @@ public class BugWorldFX_Main extends Application {
 	public ArrayList<Bug> generateBugs() {
 		ArrayList<Bug> bugList = new ArrayList<>();
 		for (int i = 0; i < bugQuantity; i++) {
-			bugList.add(new Bug(new Image("butterfly1.png"), 10));
-			bugList.add(new Bug(new Image("butterfly2.png"), 8));
-			bugList.add(new Bug(new Image("beetle1.png"), 5));
-			bugList.add(new Bug(new Image("beetle2.png"), 4));
-			bugList.add(new Bug(new Image("bee.png"), 12));
-			bugList.add(new Bug(new Image("moth.png"), 7));
-			bugList.add(new Bug(new Image("ladybug.png"), 3));
+			bugList.add(new Bug(new Image("butterfly1.png"), 10, 20, 8));// speed, hp, att
+			bugList.add(new Bug(new Image("butterfly2.png"), 8, 20, 10));
+			bugList.add(new Bug(new Image("beetle1.png"), 5, 30, 6));
+			bugList.add(new Bug(new Image("beetle2.png"), 4, 35, 8));
+			bugList.add(new Bug(new Image("bee.png"), 12, 25, 12));
+			bugList.add(new Bug(new Image("moth.png"), 7, 40, 5));
+			bugList.add(new Bug(new Image("ladybug.png"), 3, 15, 10));
 		}
 		return bugList;
 	}
@@ -58,9 +59,9 @@ public class BugWorldFX_Main extends Application {
 		Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*Tank.armor/100, 9);
 		currentHP.setFill(Color.GREEN);
 		ArrayList<Bug> bugList = generateBugs();
-		ArrayList<Missile> misList = new ArrayList<Missile> ();
-		
+		ArrayList<Missile> misList = new ArrayList<Missile>();
 		Simulate circle1 = new Simulate(200, 200, 20);
+		circle1.setFill(Color.LIGHTSALMON);
 		Group gameGroup = new Group();
 		gameGroup.getChildren().add(circle1);
 		gameGroup.getChildren().add(tank);
@@ -68,6 +69,7 @@ public class BugWorldFX_Main extends Application {
 		gameGroup.getChildren().add(currentHP);
 		for (Bug b : bugList) {
 			gameGroup.getChildren().add(b);
+			gameGroup.getChildren().add(b.label);
 		}
 		Group settingGroup = new Group();
 		Button settingButton = new Button("Apply");
@@ -93,16 +95,44 @@ public class BugWorldFX_Main extends Application {
 					circle1.direction = Math.PI-circle1.direction;
 				}
 				for (Bug b : bugList) {
+					b.changeDirection(gameSpeed);
 					if (b.getTranslateX() < 50 || b.getTranslateX()+50 > width) {
 						b.direction = Math.PI-b.direction;
 					}
 					if (b.getTranslateY() < 50 || b.getTranslateY()+50 > height) {
 						b.direction = 2*Math.PI-b.direction;
 					}
-					b.changeDirection(gameSpeed);
+					double dx = b.getTranslateX()-tank.getLayoutX();
+					double dy = b.getTranslateY()-tank.getLayoutY();
+					if (dx*dx+dy*dy <= 100*100 && System.currentTimeMillis()-Tank.lastAttacked > 300) {
+						Tank.armor -= b.damage;
+						Tank.lastAttacked = System.currentTimeMillis();
+						System.out.println(Tank.armor);
+						currentHP.setWidth(96*Tank.armor/100);
+//						Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*Tank.armor/100, 9);
+//						currentHP.setFill(Color.GREEN);
+					}
 				}
-				for(Missile m:misList){
-					m.flying();
+				for (int i = 0; i < misList.size(); i++) {
+					misList.get(i).flying();
+					Iterator<Bug> iterator = bugList.iterator();
+					while (iterator.hasNext()) {
+						Bug b = iterator.next();
+						double dx = b.getTranslateX()-misList.get(i).getLayoutX();
+						double dy = b.getTranslateY()-misList.get(i).getLayoutY();
+						if (dx*dx+dy*dy <= 60*60 && System.currentTimeMillis()-b.lastHit > 200) {
+							System.out.println("hit");
+							b.lastHit = System.currentTimeMillis();
+							b.HP -= misList.get(i).damage;
+							if (b.HP <= 0) {
+								gameGroup.getChildren().remove(b);
+								gameGroup.getChildren().remove(b.label);
+								iterator.remove();
+							}
+//							misList.remove(misList.get(i));
+							gameGroup.getChildren().remove(misList.get(i));
+						}
+					}
 				}
 				circle1.changeDirection();
 //				HPbox.setTranslateX(tank.getTranslateX());
@@ -119,19 +149,19 @@ public class BugWorldFX_Main extends Application {
 			tankHP.setLayoutY(tank.getLayoutY());
 			currentHP.setLayoutX(tank.getLayoutX());
 			currentHP.setLayoutY(tank.getLayoutY());
-			if (e.getCode() == KeyCode.W) {
+			if (e.getCode() == KeyCode.UP) {
 				tank.setRotate(0);
 				Tank.rotate = 0;
 				tank.setLayoutY(tank.getLayoutY()-Tank.speed);
-			} else if (e.getCode() == KeyCode.A) {
+			} else if (e.getCode() == KeyCode.LEFT) {
 				tank.setRotate(270);
 				Tank.rotate = 270;
 				tank.setLayoutX(tank.getLayoutX()-Tank.speed);
-			} else if (e.getCode() == KeyCode.S) {
+			} else if (e.getCode() == KeyCode.DOWN) {
 				tank.setRotate(180);
 				Tank.rotate = 180;
 				tank.setLayoutY(tank.getLayoutY()+Tank.speed);
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.RIGHT) {
 				tank.setRotate(90);
 				Tank.rotate = 90;
 				tank.setLayoutX(tank.getLayoutX()+Tank.speed);
@@ -146,17 +176,17 @@ public class BugWorldFX_Main extends Application {
 					timeline.pause();
 					setting.setVisible(true);
 				}
-			} else if (e.getCode() == KeyCode.SPACE&&System.currentTimeMillis()-Tank.lastFire>500) {
+			} else if (e.getCode() == KeyCode.SPACE && System.currentTimeMillis()-Tank.lastFire > 500) {
 				Missile missile = new Missile(new Image("missile.png"), tank.getLayoutX()+24, tank.getLayoutY(),
 						Tank.rotate);
-				Tank.lastFire=System.currentTimeMillis();
+				missile.setRotate(Tank.rotate);
+				Tank.lastFire = System.currentTimeMillis();
 				gameGroup.getChildren().add(missile);
 				misList.add(missile);
-				
 			}
-			System.out.println("lay:"+tank.getLayoutX());
-			System.out.println("x:"+tank.getX());
-			System.out.println("tran:"+tank.getTranslateX());
+//			System.out.println("lay:"+tank.getLayoutX());
+//			System.out.println("x:"+tank.getX());
+//			System.out.println("tran:"+tank.getTranslateX());
 		});
 		Image icon = new Image("ladybug.png");
 		primaryStage.getIcons().add(icon);
