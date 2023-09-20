@@ -13,19 +13,9 @@ public class Tank extends ImageView {
 	static double lastFire;
 	static double lastAttacked;
 	static double fireInterval = 0.2;
-	static double damage=10;
-
-	public Tank() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Tank(String url) {
-		super(url);
-		// TODO Auto-generated constructor stub
-	}
+	static double damage = 10;
 
 	public Tank(Image image) {
 		super(image);
-		// TODO Auto-generated constructor stub
 	}
 }

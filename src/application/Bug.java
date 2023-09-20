@@ -8,24 +8,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 public class Bug extends ImageView {
-	String name;
-	double width;
-	double height;
-	double direction;
-	double offset;
-	boolean pose;
-	double speed;
-	int HP;
-	int damage;
-	double lastHit;
+	private String name;
+	private double width;
+	private double height;
+	private double direction;
+	private double offset;
+	private boolean pose;
+	private double speed;
+	private int HP;
+	private int damage;
+	private double lastHit;
 	Label label;
-
-	public Bug() {
-	}
-
-	public Bug(String url) {
-		super(url);
-	}
 
 	public Bug(Image image, double s,int hp, int dam) {
 		super(image);
@@ -66,10 +59,40 @@ public class Bug extends ImageView {
 		label.setText(""+HP);
 	}
 
+	public double getDirection() {
+		return direction;
+	}
+
+	public void setDirection(double direction) {
+		this.direction = direction;
+	}
+
+	public int getHP() {
+		return HP;
+	}
+
+	public void setHP(int hP) {
+		HP = hP;
+	}
+
+	public double getLastHit() {
+		return lastHit;
+	}
+
+	public void setLastHit(double lastHit) {
+		this.lastHit = lastHit;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
 //	public void showHP() {
 //		Rectangle HPbox = new Rectangle(getLayoutX(), getLayoutY()+110, width, 16);
 //		HPbox.setFill(Color.GREEN);
 //		HPbox.setTranslateX(getTranslateX());
 //		HPbox.setTranslateY(getTranslateY());
 //	}
+	
+	
 }

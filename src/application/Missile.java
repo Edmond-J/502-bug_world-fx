@@ -4,18 +4,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Missile extends ImageView {
-	double rotate;
-	double speed;
-	double damage=8;
-
-	public Missile() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Missile(String url) {
-		super(url);
-		// TODO Auto-generated constructor stub
-	}
+	private double rotate;
+	private double speed;
+	private int damage=8;
 
 	public Missile(Image image, double x, double y, double rotate) {
 		super(image);
@@ -50,4 +41,10 @@ public class Missile extends ImageView {
 			setLayoutX(getLayoutX()+speed);
 		}
 	}
+
+	public int getDamage() {
+		return damage;
+	}
+	
+	
 }

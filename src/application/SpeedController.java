@@ -19,13 +19,13 @@ public class SpeedController implements Initializable {
 	public SpeedController() {
 		// TODO Auto-generated constructor stub
 	}
-
+	// line 25~line 29 are learned from YouTube Course(2:14:00):
+	// https://www.youtube.com/watch?v=9XJicRt_FaI
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		speedLabel.setText("1.0");
 		speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override// line 24~line 28 are learned from YouTube Course(2:14:00):
-						// https://www.youtube.com/watch?v=9XJicRt_FaI
+			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 //				System.out.println(speedSlider.getValue());
 				double value = speedSlider.getValue();
