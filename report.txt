@@ -1,12 +1,13 @@
+<Report of the Bug World FX>
 
 -Overcome issues:
-1.The biggest issue is to add another setting pane over the game pane when the game is paused, and return the value from the control component to the program after make the setting. I overcome this issue by keep trying different way and test the result. I got the knowledge from the javafx document, and YouTube online course. At the begining I tried to use an alart dialog window, but that doesn't look nice. I spent a lot of time to learn the theroy and finally figured out the concept and the relationship between Imageview, Scene, Pane, Group, Stage, Parent.
+1.The biggest issue is to add another setting pane over the game pane when the game is paused, and return the value from the control component to the program after make the setting. I overcome this issue by keep trying different way and test the result. Debug mode is not quite efficient in Java FX program, I normally use system print method to I narrow the defect area, and test frequently for a smaller block of code, so that it's easier to address if defect comes up. 
 
 
 -Know issues:
-1.Sometimes when a bug moves along the edge, it will get stuck, keep shaking, and can not bounce back.
+1.Sometimes when a bug moves along the edge, it will get stuck, keep shaking, and is very difficult to bounce back.
+2.Number Guessing game can't deal with illegal input.This issue has been solved by add a method which will detect each char of the string and return false if any illegal has been detected.
 
-<Report of the Bug World FX>
 
 -Most proud Features:
 1.Bugs move naturally.

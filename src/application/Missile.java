@@ -28,16 +28,12 @@ public class Missile extends ImageView {
 	
 	public void flying(){
 		if(rotate==0){
-//			setRotate(0);
 			setLayoutY(getLayoutY()-speed);
 		}else if(rotate==270){
-//			setRotate(270);
 			setLayoutX(getLayoutX()-speed);
 		}else if(rotate==180){
-//			setRotate(180);
 			setLayoutY(getLayoutY()+speed);
 		}else if((rotate==90)){
-//			setRotate(90);
 			setLayoutX(getLayoutX()+speed);
 		}
 	}

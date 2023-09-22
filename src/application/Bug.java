@@ -4,7 +4,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 public class Bug extends ImageView {
@@ -28,7 +27,7 @@ public class Bug extends ImageView {
 		height = image.getHeight();
 		setTranslateX(Math.random()*0.8*1800);
 		setTranslateY(Math.random()*0.8*1200);
-		direction = Math.random()*2*Math.PI;
+		direction = Math.random()*2*Math.PI;// the direction used for rotating the image is in angle unit
 		HP=hp;
 		damage=dam;
 		label=new Label(""+HP);
@@ -50,7 +49,7 @@ public class Bug extends ImageView {
 //		else if (Math.random() > 0.5)
 //			direction += offset*0.2;
 		setRotate(direction/Math.PI*180+90);
-		double dx = Math.cos(direction)*speed*gameSpeed;// (speed*(0.5+Math.random()*0.5))
+		double dx = Math.cos(direction)*speed*gameSpeed;//the global game speed will take affect here.
 		double dy = Math.sin(direction)*speed*gameSpeed;
 		setTranslateX(getTranslateX()+dx);
 		setTranslateY(getTranslateY()+dy);

@@ -12,19 +12,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 
 public class BugWorldFX_Main extends Application {
-	static double width = 1920;
-	static double height = 1080;
+	static double width = 1920/2;
+	static double height = 1080/2;
 	static double gameSpeed = 1.0;
 	static boolean pause = false;
 	static int bugQuantity = 1;
@@ -51,40 +48,39 @@ public class BugWorldFX_Main extends Application {
 		Tank tank = new Tank(new Image("tank.png"));
 		tank.setFitWidth(96);
 		tank.setFitHeight(96);
-		tank.setLayoutX(width/2);
-		tank.setLayoutY(height/2);
-		Rectangle tankHP = new Rectangle(tank.getX(), tank.getY()+110, 96, 9);
+		tank.setTranslateX(width/2);
+		tank.setTranslateY(height/2);
+		System.out.println("start");
+		Rectangle tankHP = new Rectangle(0, 110, 96, 9);//translateY会在初始化Y的基础上增加，所以110不能省略
+		tankHP.setTranslateX(width/2);//translateX会在初始化X的基础上增加
+		tankHP.setTranslateY(height/2);
 		tankHP.setFill(Color.LIGHTGRAY);
-		Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*Tank.armor/100, 9);
+		Rectangle currentHP = new Rectangle(0, 110, 96*Tank.armor/100, 9);
+		currentHP.setTranslateX(width/2);
+		currentHP.setTranslateY(height/2);
 		currentHP.setFill(Color.GREEN);
 		Simulate circle1 = new Simulate(200, 200, 20);
 		circle1.setFill(Color.LIGHTSALMON);
-		Group gameGroup = new Group();
-		gameGroup.getChildren().add(circle1);
-		gameGroup.getChildren().add(tank);
-		gameGroup.getChildren().add(tankHP);
-		gameGroup.getChildren().add(currentHP);
+//		Group gameGroup = new Group();// 也可以直接加到game pane里
+		Pane container = new Pane();
+		Pane game = new Pane();
+		game.getChildren().add(circle1);
+		game.getChildren().add(tank);
+		game.getChildren().add(tankHP);
+		game.getChildren().add(currentHP);
 		for (Bug b : bugList) {
-			gameGroup.getChildren().add(b);
-			gameGroup.getChildren().add(b.label);
+			game.getChildren().add(b);
+			game.getChildren().add(b.label);
 		}
 		for (int i = 0; i < 5; i++) {
-			gameGroup.getChildren().add(new Obstacle(new Image("tree.png")));
+			game.getChildren().add(new Obstacle(new Image("tree.png")));
 		}
-		gameGroup.getChildren().add(new Obstacle(new Image("home.png")));
-		gameGroup.getChildren().add(new Obstacle(new Image("house.png")));
-//		Group settingGroup = new Group();
-//		Button settingButton = new Button("Apply");
-//		settingGroup.getChildren().add(settingButton);
-		Pane container = new Pane();
-		Pane game = new Pane(gameGroup);
-//		Label gameOverLabel=new Label();
-//		Font gameOverFont=new Font(30);
-//		gameOverLabel.setText("Game Over");
-//		
-//		gameOverLabel.setFont(gameOverFont);
+		game.getChildren().add(new Obstacle(new Image("home.png")));
+		game.getChildren().add(new Obstacle(new Image("house.png")));
 		Pane gameOver = FXMLLoader.load(getClass().getResource("gameOver.fxml"));
 		gameOver.setVisible(false);
+		gameOver.setTranslateX(width/2-300);
+		gameOver.setTranslateY(height/2-200);
 		Pane setting = FXMLLoader.load(getClass().getResource("setting.fxml"));// new Pane(settingGroup);
 		setting.setVisible(false);
 		setting.setStyle("-fx-background-color: lightgray;");
@@ -93,13 +89,15 @@ public class BugWorldFX_Main extends Application {
 			@Override
 			public void handle(ActionEvent t) {
 				if (circle1.getCenterX() < circle1.getRadius() || circle1.getCenterX()+circle1.getRadius() > width) {
-					circle1.direction = Math.PI-circle1.direction;
+					circle1.direction = Math.PI-circle1.direction;// when the circle touch the edge, it will bounce back
+																	// at the right angle
 				}
 				if (circle1.getCenterY() < circle1.getRadius() || circle1.getCenterY()+circle1.getRadius() > height) {
-					circle1.direction = 2*Math.PI-circle1.direction;
+					circle1.direction = 2*Math.PI-circle1.direction;// touching the Y edge is different with touching
+																	// the X edge
 				}
-				if ((circle1.getCenterX()-tank.getLayoutX()-48)*(circle1.getCenterX()-tank.getLayoutX()-48)
-						+(circle1.getCenterY()-tank.getLayoutY()-48)*(circle1.getCenterY()-tank.getLayoutY()-48) <= 50
+				if ((circle1.getCenterX()-tank.getTranslateX()-48)*(circle1.getCenterX()-tank.getTranslateX()-48)
+						+(circle1.getCenterY()-tank.getTranslateY()-48)*(circle1.getCenterY()-tank.getTranslateY()-48) <= 50
 								*50) {
 					circle1.direction = Math.PI-circle1.direction;
 				}
@@ -111,19 +109,17 @@ public class BugWorldFX_Main extends Application {
 					if (b.getTranslateY() < 50 || b.getTranslateY()+50 > height) {
 						b.setDirection(2*Math.PI-b.getDirection());
 					}
-					double dx = b.getTranslateX()-tank.getLayoutX();
-					double dy = b.getTranslateY()-tank.getLayoutY();
+					double dx = b.getTranslateX()-tank.getTranslateX();
+					double dy = b.getTranslateY()-tank.getTranslateY();
 					if (dx*dx+dy*dy <= 100*100 && System.currentTimeMillis()-Tank.lastAttacked > 300) {
 						Tank.armor -= b.getDamage();
-						Tank.lastAttacked = System.currentTimeMillis();
+						Tank.lastAttacked = System.currentTimeMillis();// there is a min interval for being attacked
 						System.out.println(Tank.armor);
 						currentHP.setWidth(96*Tank.armor/100);
-//						Rectangle currentHP = new Rectangle(tank.getX(), tank.getY()+110, 96*Tank.armor/100, 9);
-//						currentHP.setFill(Color.GREEN);
 						if (Tank.armor <= 0) {
-							timeline.stop();
+							timeline.stop();// stop the game
 							gameOver.setVisible(true);
-							System.out.println("game over");
+//							System.out.println("game over");
 						}
 					}
 				}
@@ -132,25 +128,23 @@ public class BugWorldFX_Main extends Application {
 					Iterator<Bug> iterator = bugList.iterator();
 					while (iterator.hasNext()) {
 						Bug b = iterator.next();
-						double dx = b.getTranslateX()-misList.get(i).getLayoutX();
-						double dy = b.getTranslateY()-misList.get(i).getLayoutY();
+						double dx = b.getTranslateX()-misList.get(i).getTranslateX();
+						double dy = b.getTranslateY()-misList.get(i).getTranslateY();
 						if (dx*dx+dy*dy <= 60*60 && System.currentTimeMillis()-b.getLastHit() > 200) {
 //							System.out.println("hit");
 							b.setLastHit(System.currentTimeMillis());
 							b.setHP(b.getHP()-misList.get(i).getDamage());
 							if (b.getHP() <= 0) {
-								gameGroup.getChildren().remove(b);
-								gameGroup.getChildren().remove(b.label);
+								game.getChildren().remove(b);
+								game.getChildren().remove(b.label);
 								iterator.remove();
 							}
 //							misList.remove(misList.get(i));
-							gameGroup.getChildren().remove(misList.get(i));
+							game.getChildren().remove(misList.get(i));
 						}
 					}
 				}
 				circle1.changeDirection();
-//				HPbox.setTranslateX(tank.getTranslateX());
-//				HPbox.setTranslateY(tank.getTranslateY());
 			}
 		});
 		timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
@@ -160,29 +154,23 @@ public class BugWorldFX_Main extends Application {
 		scene.setOnKeyPressed(e -> {
 			if (Tank.armor <= 0)
 				return;
-			tankHP.setLayoutX(tank.getLayoutX());
-			tankHP.setLayoutY(tank.getLayoutY());
-			currentHP.setLayoutX(tank.getLayoutX());
-			currentHP.setLayoutY(tank.getLayoutY());
 			if (e.getCode() == KeyCode.UP) {
 				tank.setRotate(0);
 				Tank.rotate = 0;
-				tank.setLayoutY(tank.getLayoutY()-Tank.speed);
+				tank.setTranslateY(tank.getTranslateY()-Tank.speed);
 			} else if (e.getCode() == KeyCode.LEFT) {
 				tank.setRotate(270);
 				Tank.rotate = 270;
-				tank.setLayoutX(tank.getLayoutX()-Tank.speed);
+				tank.setTranslateX(tank.getTranslateX()-Tank.speed);
 			} else if (e.getCode() == KeyCode.DOWN) {
 				tank.setRotate(180);
 				Tank.rotate = 180;
-				tank.setLayoutY(tank.getLayoutY()+Tank.speed);
+				tank.setTranslateY(tank.getTranslateY()+Tank.speed);
 			} else if (e.getCode() == KeyCode.RIGHT) {
 				tank.setRotate(90);
 				Tank.rotate = 90;
-				tank.setLayoutX(tank.getLayoutX()+Tank.speed);
-//				tankHP.setTranslateX(tank.getX());
-//				tankHP.setTranslateY(tank.getY()+110);
-			} else if (e.getCode() == KeyCode.ESCAPE) {
+				tank.setTranslateX(tank.getTranslateX()+Tank.speed);
+			} else if (e.getCode() == KeyCode.ESCAPE) {// press ESC will pause the game and show the setting option
 				pause = !pause;
 				if (!pause) {
 					timeline.play();
@@ -192,16 +180,18 @@ public class BugWorldFX_Main extends Application {
 					setting.setVisible(true);
 				}
 			} else if (e.getCode() == KeyCode.SPACE && System.currentTimeMillis()-Tank.lastFire > 500) {
-				Missile missile = new Missile(new Image("missile.png"), tank.getLayoutX()+24, tank.getLayoutY(),
+				Missile missile = new Missile(new Image("missile.png"), tank.getTranslateX()+24, tank.getTranslateY(),
 						Tank.rotate);
-				missile.setRotate(Tank.rotate);
-				Tank.lastFire = System.currentTimeMillis();
-				gameGroup.getChildren().add(missile);
+				missile.setRotate(Tank.rotate);// rotate the missile pic so that it face the same direction with the gun
+				Tank.lastFire = System.currentTimeMillis();// record the tank fire time for next fire validate
+				game.getChildren().add(missile);
 				misList.add(missile);
 			}
-//			System.out.println("lay:"+tank.getLayoutX());
-//			System.out.println("x:"+tank.getX());
-//			System.out.println("tran:"+tank.getTranslateX());
+			tankHP.setTranslateX(tank.getTranslateX());// the HP box of the tank
+			tankHP.setTranslateY(tank.getTranslateY());
+			currentHP.setTranslateX(tank.getTranslateX());
+			currentHP.setTranslateY(tank.getTranslateY());
+
 		});
 		Image icon = new Image("ladybug.png");
 		primaryStage.getIcons().add(icon);
