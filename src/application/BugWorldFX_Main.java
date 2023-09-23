@@ -20,8 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class BugWorldFX_Main extends Application {
-	static double width = 1920/2;
-	static double height = 1080/2;
+	static double width = 1920;
+	static double height = 1080;
 	static double gameSpeed = 1.0;
 	static boolean pause = false;
 	static int bugQuantity = 1;
@@ -89,7 +89,7 @@ public class BugWorldFX_Main extends Application {
 			@Override
 			public void handle(ActionEvent t) {
 				if (circle1.getCenterX() < circle1.getRadius() || circle1.getCenterX()+circle1.getRadius() > width) {
-					circle1.direction = Math.PI-circle1.direction;// when the circle touch the edge, it will bounce back
+					circle1.direction = 2*Math.PI-circle1.direction;// when the circle touch the edge, it will bounce back
 																	// at the right angle
 				}
 				if (circle1.getCenterY() < circle1.getRadius() || circle1.getCenterY()+circle1.getRadius() > height) {
@@ -103,11 +103,13 @@ public class BugWorldFX_Main extends Application {
 				}
 				for (Bug b : bugList) {
 					b.changeDirection(gameSpeed);
-					if (b.getTranslateX() < 50 || b.getTranslateX()+50 > width) {
+					if (b.getTranslateX() < 0 || b.getTranslateX()+200 > width) {
 						b.setDirection(Math.PI-b.getDirection());
+						b.setTranslateX(Math.min(width-200,Math.max(0, b.getTranslateX())));
 					}
-					if (b.getTranslateY() < 50 || b.getTranslateY()+50 > height) {
+					if (b.getTranslateY() < 0 || b.getTranslateY()+100 > height) {
 						b.setDirection(2*Math.PI-b.getDirection());
+						b.setTranslateY(Math.min(height-100,Math.max(0, b.getTranslateY())));
 					}
 					double dx = b.getTranslateX()-tank.getTranslateX();
 					double dy = b.getTranslateY()-tank.getTranslateY();
@@ -128,8 +130,8 @@ public class BugWorldFX_Main extends Application {
 					Iterator<Bug> iterator = bugList.iterator();
 					while (iterator.hasNext()) {
 						Bug b = iterator.next();
-						double dx = b.getTranslateX()-misList.get(i).getTranslateX();
-						double dy = b.getTranslateY()-misList.get(i).getTranslateY();
+						double dx = b.getTranslateX()-misList.get(i).getLayoutX();
+						double dy = b.getTranslateY()-misList.get(i).getLayoutY();
 						if (dx*dx+dy*dy <= 60*60 && System.currentTimeMillis()-b.getLastHit() > 200) {
 //							System.out.println("hit");
 							b.setLastHit(System.currentTimeMillis());
@@ -182,6 +184,11 @@ public class BugWorldFX_Main extends Application {
 			} else if (e.getCode() == KeyCode.SPACE && System.currentTimeMillis()-Tank.lastFire > 500) {
 				Missile missile = new Missile(new Image("missile.png"), tank.getTranslateX()+24, tank.getTranslateY(),
 						Tank.rotate);
+//				System.out.println(missile.getX());
+//				System.out.println(missile.getLayoutX());
+//				System.out.println(missile.getTranslateX());
+//				missile.setTranslateX(tank.getTranslateX()+24);
+//				missile.setTranslateY(tank.getTranslateY());
 				missile.setRotate(Tank.rotate);// rotate the missile pic so that it face the same direction with the gun
 				Tank.lastFire = System.currentTimeMillis();// record the tank fire time for next fire validate
 				game.getChildren().add(missile);

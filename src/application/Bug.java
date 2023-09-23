@@ -25,8 +25,8 @@ public class Bug extends ImageView {
 		speed = s;
 		width = image.getWidth();
 		height = image.getHeight();
-		setTranslateX(Math.random()*0.8*1800);
-		setTranslateY(Math.random()*0.8*1200);
+		setTranslateX(Math.random()*0.8*BugWorldFX_Main.width);
+		setTranslateY(Math.random()*0.8*BugWorldFX_Main.height);
 		direction = Math.random()*2*Math.PI;// the direction used for rotating the image is in angle unit
 		HP=hp;
 		damage=dam;
