@@ -29,13 +29,13 @@ public class BugWorldFX_Main extends Application {
 	public ArrayList<Bug> generateBugs() {
 		ArrayList<Bug> bugList = new ArrayList<>();
 		for (int i = 0; i < bugQuantity; i++) {
-			bugList.add(new Bug(new Image("butterfly1.png"), 10, 20, 8));// speed, HP, damage
-			bugList.add(new Bug(new Image("butterfly2.png"), 8, 20, 10));
-			bugList.add(new Bug(new Image("beetle1.png"), 5, 30, 6));
-			bugList.add(new Bug(new Image("beetle2.png"), 4, 35, 8));
-			bugList.add(new Bug(new Image("bee.png"), 12, 25, 12));
-			bugList.add(new Bug(new Image("moth.png"), 7, 40, 5));
-			bugList.add(new Bug(new Image("ladybug.png"), 3, 15, 10));
+			bugList.add(new Bug(new Image("img/butterfly1.png"), 10, 20, 8));// speed, HP, damage
+			bugList.add(new Bug(new Image("img/butterfly2.png"), 8, 20, 10));
+			bugList.add(new Bug(new Image("img/beetle1.png"), 5, 30, 6));
+			bugList.add(new Bug(new Image("img/beetle2.png"), 4, 35, 8));
+			bugList.add(new Bug(new Image("img/bee.png"), 12, 25, 12));
+			bugList.add(new Bug(new Image("img/moth.png"), 7, 40, 5));
+			bugList.add(new Bug(new Image("img/ladybug.png"), 3, 15, 10));
 		}
 		return bugList;
 	}
@@ -45,7 +45,9 @@ public class BugWorldFX_Main extends Application {
 		Timeline timeline = new Timeline();
 		ArrayList<Bug> bugList = generateBugs();
 		ArrayList<Missile> misList = new ArrayList<Missile>();
-		Tank tank = new Tank(new Image("tank.png"));
+		Tank tank = new Tank(new Image("img/tank.png"));
+//		double factor=1/1.75;
+//		Scale scale = new Scale(factor, factor);
 		tank.setFitWidth(96);
 		tank.setFitHeight(96);
 		tank.setTranslateX(width/2);
@@ -73,10 +75,10 @@ public class BugWorldFX_Main extends Application {
 			game.getChildren().add(b.label);
 		}
 		for (int i = 0; i < 5; i++) {
-			game.getChildren().add(new Obstacle(new Image("tree.png")));
+			game.getChildren().add(new Obstacle(new Image("img/tree.png")));
 		}
-		game.getChildren().add(new Obstacle(new Image("home.png")));
-		game.getChildren().add(new Obstacle(new Image("house.png")));
+		game.getChildren().add(new Obstacle(new Image("img/home.png")));
+		game.getChildren().add(new Obstacle(new Image("img/house.png")));
 		Pane gameOver = FXMLLoader.load(getClass().getResource("gameOver.fxml"));
 		gameOver.setVisible(false);
 		gameOver.setTranslateX(width/2-300);
@@ -85,6 +87,7 @@ public class BugWorldFX_Main extends Application {
 		setting.setVisible(false);
 		setting.setStyle("-fx-background-color: lightgray;");
 		container.getChildren().addAll(game, setting, gameOver);
+//		container.getTransforms().add(scale);
 		KeyFrame frame = new KeyFrame(Duration.millis(25), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent t) {
@@ -182,7 +185,7 @@ public class BugWorldFX_Main extends Application {
 					setting.setVisible(true);
 				}
 			} else if (e.getCode() == KeyCode.SPACE && System.currentTimeMillis()-Tank.lastFire > 500) {
-				Missile missile = new Missile(new Image("missile.png"), tank.getTranslateX()+24, tank.getTranslateY(),
+				Missile missile = new Missile(new Image("img/missile.png"), tank.getTranslateX()+24, tank.getTranslateY(),
 						Tank.rotate);
 //				System.out.println(missile.getX());
 //				System.out.println(missile.getLayoutX());
@@ -198,9 +201,9 @@ public class BugWorldFX_Main extends Application {
 			tankHP.setTranslateY(tank.getTranslateY());
 			currentHP.setTranslateX(tank.getTranslateX());
 			currentHP.setTranslateY(tank.getTranslateY());
-
+			
 		});
-		Image icon = new Image("ladybug.png");
+		Image icon = new Image("img/ladybug.png");
 		primaryStage.getIcons().add(icon);
 		primaryStage.setTitle("Bug World FX");
 		primaryStage.setResizable(false);
