@@ -3,7 +3,7 @@
 This is my first JavaFX program. After using ecs100.jar for an entire paper, finally we got a more advanced GUI framework to build games and apps.   
 This is a game where you control a tank to fight bugs.   
 Find the executable application (bug_world-fx.exe) from Google Drive:  
-[Edmond's Java Program Collection.zip (Windows)](https://drive.google.com/file/d/1JnsHsp5DMIYMjxFSXQ2bWQ5w6bDB_L0V/view?usp=sharing)
+[Edmond's Java Program Collection.zip (Windows)](https://drive.google.com/file/d/1ve7sEscvtVldRKZU-B3VhaQdORteksQk/view?usp=drive_link)
 
 ## Snapshot
 ![UI](screenshot/ui-1.png)
